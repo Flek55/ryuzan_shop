@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                           List ans = await _loginButtonAction();
                           inProgress = false;
                           if (ans[0]) {
-                            //await ProductInfo.getData();
+                            await ProductInfo.getData();
                             SharedPreferences _sp =
                                 await SharedPreferences.getInstance();
                             LocalDataAnalyse _LDA = LocalDataAnalyse(sp: _sp);

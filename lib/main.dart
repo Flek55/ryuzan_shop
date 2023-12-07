@@ -8,10 +8,12 @@ import 'package:ryozan_shop/scroll_behavior.dart';
 import 'package:ryozan_shop/start.dart';
 import 'package:ryozan_shop/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'api.dart';
+import 'db.dart';
 import 'first.dart';
 import 'logreg.dart';
+
+const sburl = "https://kbhfwdxktibqslpkqpkj.supabase.co";
+const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtiaGZ3ZHhrdGlicXNscGtxcGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE2MDU5MzEsImV4cCI6MjAxNzE4MTkzMX0.Ji89I1qlefTHNClFZ7JxVKLap9CJQgo0aIlPybQ09Ds';
 
 
 Future<void> main() async {
@@ -23,10 +25,9 @@ Future<void> main() async {
   ]);
 
   await Supabase.initialize(
-    url: Constants.supabaseUrl,
-    anonKey: Constants.supabaseAnnonKey,
+    url: sburl,
+    anonKey: anonKey,
   );
-
 
   runApp(MaterialApp(
     scrollBehavior: MyBehavior(),

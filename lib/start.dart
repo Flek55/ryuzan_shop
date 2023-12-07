@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ryozan_shop/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'cache.dart';
 import 'db.dart';
+import 'main.dart';
 
 class Start extends StatefulWidget {
   const Start({super.key});
@@ -131,6 +135,10 @@ class StartState extends State<Start> {
     });
   }
 
+  Future<Object?> getNavigator(){
+    return Navigator.pushNamedAndRemoveUntil(
+        context, "/", (r) => false);
+  }
   @override
   Widget build(BuildContext context) {
     w = MediaQuery.of(context).size.width;
@@ -142,14 +150,13 @@ class StartState extends State<Start> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               UserAccountsDrawerHeader(
-                accountName: Text("dsd"),
-                accountEmail: Text("dsd"),
+                accountName: Text(CurrentUserData.email, style: TextStyle(fontSize: 15),),
                 currentAccountPicture: CircleAvatar(
                   child: ClipOval(
                     child: Image.asset('assets/user_pic.jpg'),
                   ),
                 ),
-                decoration: const BoxDecoration(color: Colors.black38),
+                decoration: const BoxDecoration(color: Colors.black38), accountEmail: null,
               ),
               buildHeader(context),
               buildMenuItems(context),
@@ -220,6 +227,32 @@ class StartState extends State<Start> {
             onTap: () {
               _onItemTapped(2);
               Navigator.pop(context);
+            },
+          ),
+          const Divider(
+            thickness: 2,
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, size: 31,),
+            title: const Text(
+              "Выйти из аккаунта",
+              style: TextStyle(fontSize: 23),
+            ),
+            onTap: () async {
+              SupabaseAuthRepository sba = SupabaseAuthRepository();
+              sba.signOut();
+              SharedPreferences _sp =
+                  await SharedPreferences.getInstance();
+              LocalDataAnalyse _LDA = LocalDataAnalyse(sp: _sp);
+              _LDA.setLoginStatus(
+                  "0",
+                  "",
+                  "");
+              CurrentUserData.email =
+                  "";
+              CurrentUserData.pass =
+                  "";
+              getNavigator();
             },
           ),
         ],

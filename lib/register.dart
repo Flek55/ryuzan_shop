@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ryozan_shop/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -53,23 +54,23 @@ class _SignUpPageState extends State<SignUpPage> {
     inProgress = true;
     _email = _emailController.text;
     _password = _passwordController.text;
+    SupabaseAuthRepository sar = SupabaseAuthRepository();
 
     if (_email.isEmpty || _password.isEmpty) return [false,"Введите email и пароль"];
 
-    // String result = await _authService.registerWithEmailAndPassword(
-    //     _email.trim(), _password.trim());
-    // CurrentUserData.email = _email.trim();
-    // if (CurrentUserData.email == "") {
-    //   inProgress = true;
-    //   return [false, result];
-    // } else if(result == "Success") {
-    //   inProgress = true;
-    //   return [true, result];
-    // }else{
-    //   inProgress = true;
-    //   return [false, result];
-    // }
-    return [];
+    String result = await sar.signUpEmailAndPassword(
+        _email.trim(), _password.trim());
+    CurrentUserData.email = _email.trim();
+    if (CurrentUserData.email == "") {
+      inProgress = true;
+      return [false, result];
+    } else if(result == "1") {
+      inProgress = true;
+      return [true, result];
+    }else{
+      inProgress = true;
+      return [false, result];
+    }
   }
 
   _getHeader() {

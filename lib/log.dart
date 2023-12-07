@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ryozan_shop/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'cache.dart';
@@ -52,17 +53,18 @@ class _LoginPageState extends State<LoginPage> {
     inProgress = true;
     _email = _emailController.text;
     _password = _passwordController.text;
+    SupabaseAuthRepository sar = SupabaseAuthRepository();
 
     if (_email.isEmpty || _password.isEmpty) return [false,"0"];
 
-    // AppUser? user = await _authService.signInWithEmailAndPassword(
-    //     _email.trim(), _password.trim());
-    // if (user == null) {
-    //   return [false,"0"];
-    // } else {
-    //   return [true,user.id];
-    // }
-    return [];
+    String result = await sar.signInEmailAndPassword(
+        _email.trim(), _password.trim());
+    if (result == "") {
+      return [false,"0"];
+    } else {
+      return [true,"1"];
+    }
+
   }
 
   _getHeader() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ryozan_shop/auth.dart';
 
 class ForgetPass extends StatefulWidget {
   const ForgetPass({Key? key}) : super(key: key);
@@ -104,7 +105,8 @@ class _ForgetPassState extends State<ForgetPass> {
               child: IconButton(
                   onPressed: () {
                     if (_emailController.text.trim() != "") {
-                      //_authService.resetPassword(_emailController.text.trim());
+                      SupabaseAuthRepository sar = SupabaseAuthRepository();
+                      sar.resetPassword(_emailController.text.trim());
                       Fluttertoast.showToast(
                           msg: "Письмо на эл.почту отправлено!",
                           toastLength: Toast.LENGTH_SHORT,

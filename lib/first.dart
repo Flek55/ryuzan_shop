@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:ryozan_shop/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -65,9 +66,8 @@ class _FirstState extends State<First> {
               String user_password = await _LDA.getUserPassword();
               CurrentUserData.pass = user_password;
               CurrentUserData.name = "dasdsadas";
-              //AppUser? user =
-              // await _authService.signInWithEmailAndPassword(
-              //     user_login.trim(), user_password.trim());
+              SupabaseAuthRepository sar = SupabaseAuthRepository();
+              //await sar.signInEmailAndPassword(user_login.trim(), user_password.trim());
               if (false) {
                 await ProductInfo.getData();
                 inProgress = false;

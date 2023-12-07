@@ -59,10 +59,10 @@ class _LoginPageState extends State<LoginPage> {
 
     String result = await sar.signInEmailAndPassword(
         _email.trim(), _password.trim());
-    if (result == "") {
-      return [false,"0"];
-    } else {
+    if (result == "1") {
       return [true,"1"];
+    } else {
+      return [false,"0"];
     }
 
   }
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                           List ans = await _loginButtonAction();
                           inProgress = false;
                           if (ans[0]) {
-                            await ProductInfo.getData();
+                            //await ProductInfo.getData();
                             SharedPreferences _sp =
                                 await SharedPreferences.getInstance();
                             LocalDataAnalyse _LDA = LocalDataAnalyse(sp: _sp);

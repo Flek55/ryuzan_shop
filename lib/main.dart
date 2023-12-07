@@ -8,7 +8,6 @@ import 'package:ryozan_shop/scroll_behavior.dart';
 import 'package:ryozan_shop/start.dart';
 import 'package:ryozan_shop/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:ryozan_shop/db.dart';
 
 import 'api.dart';
 import 'first.dart';
@@ -16,18 +15,17 @@ import 'logreg.dart';
 
 
 Future<void> main() async {
-  await Supabase.initialize(
-    url: SBData.supabaseUrl,
-    anonKey: SBData.anonKey,
-  );
-  SupabaseClient(SBData.supabaseUrl, SBData.anonKey);
-
-
   ///Делает приложение неповоротным на экране
   WidgetsFlutterBinding.ensureInitialized();
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  await Supabase.initialize(
+    url: Constants.supabaseUrl,
+    anonKey: Constants.supabaseAnnonKey,
+  );
 
 
   runApp(MaterialApp(

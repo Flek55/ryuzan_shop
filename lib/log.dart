@@ -143,10 +143,10 @@ class _LoginPageState extends State<LoginPage> {
                           inProgress = false;
                           if (ans[0]) {
                             await ProductInfo.getData();
-                            SharedPreferences _sp =
+                            SharedPreferences sp =
                                 await SharedPreferences.getInstance();
-                            LocalDataAnalyse _LDA = LocalDataAnalyse(sp: _sp);
-                            _LDA.setLoginStatus(
+                            LocalDataAnalyse LDA = LocalDataAnalyse(sp: sp);
+                            LDA.setLoginStatus(
                                 "1",
                                 _emailController.text.trim(),
                                 _passwordController.text.trim());

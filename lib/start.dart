@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:ryozan_shop/auth.dart';
 import 'package:ryozan_shop/product_page.dart';
@@ -16,22 +18,24 @@ class Start extends StatefulWidget {
 
 class StartState extends State<Start> {
   static List<Map<String, dynamic>> productData = [];
+  static List<Map<String, dynamic>> cart = [];
   static double w = 400;
   static double h = 150;
 
   @override
   void initState() {
     productData = ProductInfo.data;
-
+    print(productData);
+    cart = ProductInfo.cart;
     super.initState();
   }
 
   refresh() {
     setState(() {});
+    print(cart);
   }
 
   int _selectedIndex = 0;
-
 
   void _onItemTapped(int index) {
     setState(() {
@@ -40,13 +44,12 @@ class StartState extends State<Start> {
   }
 
   Future<Object?> getNavigator() {
-    return Navigator.pushNamedAndRemoveUntil(
-        context, "/", (r) => false);
+    return Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _widgetOptions = <Widget>[
+    List<Widget> widgetOptions = [
       SingleChildScrollView(
         child: Column(children: [
           const Padding(padding: EdgeInsets.only(top: 10)),
@@ -54,24 +57,23 @@ class StartState extends State<Start> {
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 0.0, horizontal: 10.0),
                   child: InkWell(
                       onTap: () {
+
                         Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                ProductPage(productIndex: index,
-                                    notifyParent: Future.delayed(
-                                        Duration.zero, () async {
-                                      refresh();
-                                    }),),
-                        ));
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => ProductPage(
+                                  productIndex: index, notifyParent: (){
+                                Timer.periodic(const Duration(seconds: 1), (Timer t) => setState(() {}));
+                              }),
+                            ));
                       },
-                      child: Container(
+                      child: SizedBox(
                           height: 110,
-                          child: Container(
+                          child: SizedBox(
                             width: w * 0.94,
                             child: Card(
                               shape: RoundedRectangleBorder(
@@ -95,10 +97,10 @@ class StartState extends State<Start> {
                                     ),
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Container(
+                                      SizedBox(
                                         width: w * 0.5,
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(
@@ -112,7 +114,7 @@ class StartState extends State<Start> {
                                           ),
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: w * 0.5,
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(
@@ -133,7 +135,7 @@ class StartState extends State<Start> {
                                         padding: const EdgeInsets.fromLTRB(
                                             5, 40, 0, 0),
                                         child: Text(
-                                          '\₽ ${productData[index]["price"]}',
+                                          '₽ ${productData[index]["price"]}',
                                           style: const TextStyle(
                                             fontSize: 14,
                                           ),
@@ -161,24 +163,26 @@ class StartState extends State<Start> {
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 0.0, horizontal: 10.0),
                   child: InkWell(
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                  ProductPage(productIndex: index,
-                                    notifyParent: Future.delayed(
-                                        Duration.zero, () async {
-                                      refresh();
-                                    }),),
+                              builder: (BuildContext context) => ProductPage(
+                                productIndex:
+                                    int.parse(cart[index].keys.elementAt(0)) -
+                                        1,
+                                notifyParent: (){
+                                  Timer.periodic(const Duration(seconds: 1), (Timer t) => setState(() {}));
+                                },
+                              ),
                             ));
                       },
-                      child: Container(
+                      child: SizedBox(
                           height: 110,
-                          child: Container(
+                          child: SizedBox(
                             width: w * 0.94,
                             child: Card(
                               shape: RoundedRectangleBorder(
@@ -197,21 +201,24 @@ class StartState extends State<Start> {
                                         maxHeight: h * 0.28,
                                       ),
                                       child: Image.network(
-                                          productData[index]["link"],
+                                          productData[int.parse(cart[index]
+                                                  .keys
+                                                  .elementAt(0)) -
+                                              1]["link"],
                                           fit: BoxFit.fill),
                                     ),
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Container(
+                                      SizedBox(
                                         width: w * 0.5,
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               5, 10, 0, 0),
                                           child: Text(
-                                            '${productData[index]["name"]}',
+                                            '${productData[int.parse(cart[index].keys.elementAt(0)) - 1]["name"]}',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18,
@@ -219,13 +226,13 @@ class StartState extends State<Start> {
                                           ),
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: w * 0.5,
                                         child: Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               5, 10, 0, 0),
                                           child: Text(
-                                            "${productData[index]["description"]}",
+                                            "${productData[int.parse(cart[index].keys.elementAt(0)) - 1]["description"]}",
                                             style: const TextStyle(
                                               fontSize: 12,
                                             ),
@@ -240,7 +247,7 @@ class StartState extends State<Start> {
                                         padding: const EdgeInsets.fromLTRB(
                                             5, 40, 0, 0),
                                         child: Text(
-                                          '\₽ ${productData[index]["price"]}',
+                                          '₽ ${productData[int.parse(cart[index].keys.elementAt(0)) - 1]["price"]}',
                                           style: const TextStyle(
                                             fontSize: 14,
                                           ),
@@ -256,23 +263,17 @@ class StartState extends State<Start> {
             separatorBuilder: (BuildContext context, int index) {
               return const Padding(padding: EdgeInsets.only(top: 10));
             },
-            itemCount: ProductInfo.data.length,
+            itemCount: cart.length,
             shrinkWrap: true,
           ),
         ]),
       ),
-      Text(
+      const Text(
         'Index 2: School',
       ),
     ];
-    w = MediaQuery
-        .of(context)
-        .size
-        .width;
-    h = MediaQuery
-        .of(context)
-        .size
-        .height;
+    w = MediaQuery.of(context).size.width;
+    h = MediaQuery.of(context).size.height;
     return Scaffold(
       drawer: Drawer(
         child: ListView(padding: EdgeInsets.zero, children: [
@@ -281,7 +282,9 @@ class StartState extends State<Start> {
             children: <Widget>[
               UserAccountsDrawerHeader(
                 accountName: Text(
-                  CurrentUserData.email, style: TextStyle(fontSize: 15),),
+                  CurrentUserData.email,
+                  style: const TextStyle(fontSize: 15),
+                ),
                 currentAccountPicture: CircleAvatar(
                   child: ClipOval(
                     child: Image.asset('assets/user_pic.jpg'),
@@ -306,23 +309,18 @@ class StartState extends State<Start> {
       ),
       body: SafeArea(
           child: SingleChildScrollView(
-            child: _widgetOptions[_selectedIndex],
-          )),
+        child: widgetOptions[_selectedIndex],
+      )),
     );
   }
 
-  Widget buildHeader(BuildContext context) =>
-      Container(
+  Widget buildHeader(BuildContext context) => Container(
         padding: EdgeInsets.only(
-          top: MediaQuery
-              .of(context)
-              .padding
-              .top,
+          top: MediaQuery.of(context).padding.top,
         ),
       );
 
-  Widget buildMenuItems(BuildContext context) =>
-      Wrap(
+  Widget buildMenuItems(BuildContext context) => Wrap(
         runSpacing: 16,
         children: [
           ListTile(
@@ -371,7 +369,10 @@ class StartState extends State<Start> {
             thickness: 2,
           ),
           ListTile(
-            leading: const Icon(Icons.logout, size: 31,),
+            leading: const Icon(
+              Icons.logout,
+              size: 31,
+            ),
             title: const Text(
               "Выйти из аккаунта",
               style: TextStyle(fontSize: 23),
@@ -379,17 +380,11 @@ class StartState extends State<Start> {
             onTap: () async {
               SupabaseAuthRepository sba = SupabaseAuthRepository();
               sba.signOut();
-              SharedPreferences _sp =
-              await SharedPreferences.getInstance();
-              LocalDataAnalyse _LDA = LocalDataAnalyse(sp: _sp);
-              _LDA.setLoginStatus(
-                  "0",
-                  "",
-                  "");
-              CurrentUserData.email =
-              "";
-              CurrentUserData.pass =
-              "";
+              SharedPreferences sp = await SharedPreferences.getInstance();
+              LocalDataAnalyse LDA = LocalDataAnalyse(sp: sp);
+              LDA.setLoginStatus("0", "", "");
+              CurrentUserData.email = "";
+              CurrentUserData.pass = "";
               getNavigator();
             },
           ),

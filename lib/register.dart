@@ -161,9 +161,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             EasyLoading.show();
                             SharedPreferences sp =
                                 await SharedPreferences.getInstance();
-                            LocalDataAnalyse _LDA = LocalDataAnalyse(sp: sp);
+                            LocalDataAnalyse LDA = LocalDataAnalyse(sp: sp);
                             await ProductInfo.getData();
-                            _LDA.setLoginStatus(
+                            LDA.setLoginStatus(
                                 "1",
                                 _emailController.text.trim(),
                                 _passwordController.text.trim());

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -5,7 +7,7 @@ import 'db.dart';
 
 class ProductPage extends StatefulWidget {
   final int productIndex;
-  final Future<void> notifyParent;
+  final Function notifyParent;
 
   const ProductPage({Key? key, required this.productIndex, required this.notifyParent}) : super(key: key);
 
@@ -18,6 +20,7 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   void initState() {
+
     pageData = ProductInfo.data[widget.productIndex];
     super.initState();
   }
@@ -38,6 +41,8 @@ class _ProductPageState extends State<ProductPage> {
                     Supabase.instance.client.auth.currentUser?.id,
                     Supabase.instance.client.auth.currentUser?.email,
                     widget.productIndex, "+");
+                await ProductInfo.getCart(Supabase.instance.client.auth.currentUser?.id);
+                await widget.notifyParent();
               },
               icon: const Icon(
                 Icons.add,
@@ -80,8 +85,9 @@ class _ProductPageState extends State<ProductPage> {
                 Supabase.instance.client.auth.currentUser?.id,
                 Supabase.instance.client.auth.currentUser?.email,
                 widget.productIndex, "-");
-            widget.notifyParent;
-          }, icon: Icon(Icons.remove))
+            await ProductInfo.getCart(Supabase.instance.client.auth.currentUser?.id);
+            await widget.notifyParent();
+          }, icon: const Icon(Icons.remove))
         ]));
   }
 }

@@ -6,9 +6,7 @@ import 'package:ryozan_shop/log.dart';
 import 'package:ryozan_shop/register.dart';
 import 'package:ryozan_shop/scroll_behavior.dart';
 import 'package:ryozan_shop/start.dart';
-import 'package:ryozan_shop/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'db.dart';
 import 'first.dart';
 import 'logreg.dart';
 
@@ -31,7 +29,6 @@ Future<void> main() async {
 
   runApp(MaterialApp(
     scrollBehavior: MyBehavior(),
-    theme: theme(),
     builder: EasyLoading.init(),
     debugShowCheckedModeBanner: false,
     initialRoute: '/',

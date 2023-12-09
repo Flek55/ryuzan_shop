@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ryozan_shop/auth.dart';
+import 'package:ryozan_shop/product_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'cache.dart';
@@ -21,113 +22,16 @@ class StartState extends State<Start> {
   @override
   void initState() {
     productData = ProductInfo.data;
+
     super.initState();
+  }
+
+  refresh() {
+    setState(() {});
   }
 
   int _selectedIndex = 0;
 
-  final List<Widget> _widgetOptions = <Widget>[
-    SingleChildScrollView(
-      child: Column(children: [
-        const Padding(padding: EdgeInsets.only(top: 10)),
-        ListView.separated(
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-            return Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
-                child: InkWell(
-                  onTap: (){},
-                    child: Container(
-                        height: 110,
-                        child: Container(
-                          width: w * 0.94,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0.0),
-                            ),
-                            color: Colors.white70,
-                            elevation: 10,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxWidth: w * 0.28,
-                                      maxHeight: h * 0.28,
-                                    ),
-                                    child: Image.network(
-                                        productData[index]["link"],
-                                        fit: BoxFit.fill),
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      width: w * 0.5,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            5, 10, 0, 0),
-                                        child: Text(
-                                          '${productData[index]["name"]}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: w * 0.5,
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            5, 10, 0, 0),
-                                        child: Text("${productData[index]["description"]}",
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          5, 40, 0, 0),
-                                      child: Text(
-                                        '\₽ ${productData[index]["price"]}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ))));
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Padding(padding: EdgeInsets.only(top: 10));
-          },
-          itemCount: ProductInfo.data.length,
-          shrinkWrap: true,
-        ),
-      ]),
-    ),
-    Text(
-      'Index 1: Business',
-    ),
-    Text(
-      'Index 2: School',
-    ),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -135,14 +39,240 @@ class StartState extends State<Start> {
     });
   }
 
-  Future<Object?> getNavigator(){
+  Future<Object?> getNavigator() {
     return Navigator.pushNamedAndRemoveUntil(
         context, "/", (r) => false);
   }
+
   @override
   Widget build(BuildContext context) {
-    w = MediaQuery.of(context).size.width;
-    h = MediaQuery.of(context).size.height;
+    List<Widget> _widgetOptions = <Widget>[
+      SingleChildScrollView(
+        child: Column(children: [
+          const Padding(padding: EdgeInsets.only(top: 10)),
+          ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                ProductPage(productIndex: index,
+                                    notifyParent: Future.delayed(
+                                        Duration.zero, () async {
+                                      refresh();
+                                    }),),
+                        ));
+                      },
+                      child: Container(
+                          height: 110,
+                          child: Container(
+                            width: w * 0.94,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
+                              color: Colors.white70,
+                              elevation: 10,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxWidth: w * 0.28,
+                                        maxHeight: h * 0.28,
+                                      ),
+                                      child: Image.network(
+                                          productData[index]["link"],
+                                          fit: BoxFit.fill),
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: <Widget>[
+                                      Container(
+                                        width: w * 0.5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 10, 0, 0),
+                                          child: Text(
+                                            '${productData[index]["name"]}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: w * 0.5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 10, 0, 0),
+                                          child: Text(
+                                            "${productData[index]["description"]}",
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5, 40, 0, 0),
+                                        child: Text(
+                                          '\₽ ${productData[index]["price"]}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ))));
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Padding(padding: EdgeInsets.only(top: 10));
+            },
+            itemCount: ProductInfo.data.length,
+            shrinkWrap: true,
+          ),
+        ]),
+      ),
+      SingleChildScrollView(
+        child: Column(children: [
+          const Padding(padding: EdgeInsets.only(top: 10)),
+          ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  ProductPage(productIndex: index,
+                                    notifyParent: Future.delayed(
+                                        Duration.zero, () async {
+                                      refresh();
+                                    }),),
+                            ));
+                      },
+                      child: Container(
+                          height: 110,
+                          child: Container(
+                            width: w * 0.94,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
+                              color: Colors.white70,
+                              elevation: 10,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxWidth: w * 0.28,
+                                        maxHeight: h * 0.28,
+                                      ),
+                                      child: Image.network(
+                                          productData[index]["link"],
+                                          fit: BoxFit.fill),
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: <Widget>[
+                                      Container(
+                                        width: w * 0.5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 10, 0, 0),
+                                          child: Text(
+                                            '${productData[index]["name"]}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: w * 0.5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 10, 0, 0),
+                                          child: Text(
+                                            "${productData[index]["description"]}",
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5, 40, 0, 0),
+                                        child: Text(
+                                          '\₽ ${productData[index]["price"]}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ))));
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Padding(padding: EdgeInsets.only(top: 10));
+            },
+            itemCount: ProductInfo.data.length,
+            shrinkWrap: true,
+          ),
+        ]),
+      ),
+      Text(
+        'Index 2: School',
+      ),
+    ];
+    w = MediaQuery
+        .of(context)
+        .size
+        .width;
+    h = MediaQuery
+        .of(context)
+        .size
+        .height;
     return Scaffold(
       drawer: Drawer(
         child: ListView(padding: EdgeInsets.zero, children: [
@@ -150,13 +280,15 @@ class StartState extends State<Start> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               UserAccountsDrawerHeader(
-                accountName: Text(CurrentUserData.email, style: TextStyle(fontSize: 15),),
+                accountName: Text(
+                  CurrentUserData.email, style: TextStyle(fontSize: 15),),
                 currentAccountPicture: CircleAvatar(
                   child: ClipOval(
                     child: Image.asset('assets/user_pic.jpg'),
                   ),
                 ),
-                decoration: const BoxDecoration(color: Colors.black38), accountEmail: null,
+                decoration: const BoxDecoration(color: Colors.black38),
+                accountEmail: null,
               ),
               buildHeader(context),
               buildMenuItems(context),
@@ -174,18 +306,23 @@ class StartState extends State<Start> {
       ),
       body: SafeArea(
           child: SingleChildScrollView(
-        child: _widgetOptions[_selectedIndex],
-      )),
+            child: _widgetOptions[_selectedIndex],
+          )),
     );
   }
 
-  Widget buildHeader(BuildContext context) => Container(
+  Widget buildHeader(BuildContext context) =>
+      Container(
         padding: EdgeInsets.only(
-          top: MediaQuery.of(context).padding.top,
+          top: MediaQuery
+              .of(context)
+              .padding
+              .top,
         ),
       );
 
-  Widget buildMenuItems(BuildContext context) => Wrap(
+  Widget buildMenuItems(BuildContext context) =>
+      Wrap(
         runSpacing: 16,
         children: [
           ListTile(
@@ -243,16 +380,16 @@ class StartState extends State<Start> {
               SupabaseAuthRepository sba = SupabaseAuthRepository();
               sba.signOut();
               SharedPreferences _sp =
-                  await SharedPreferences.getInstance();
+              await SharedPreferences.getInstance();
               LocalDataAnalyse _LDA = LocalDataAnalyse(sp: _sp);
               _LDA.setLoginStatus(
                   "0",
                   "",
                   "");
               CurrentUserData.email =
-                  "";
+              "";
               CurrentUserData.pass =
-                  "";
+              "";
               getNavigator();
             },
           ),

@@ -56,7 +56,6 @@ class _FirstState extends State<First> {
             LocalDataAnalyse _LDA = LocalDataAnalyse(sp: _sp);
             String status = await _LDA.getLoginStatus();
             if (status == "1") {
-              print("1");
               String user_login = await _LDA.getUserLogin();
               CurrentUserData.email = user_login;
               String user_password = await _LDA.getUserPassword();

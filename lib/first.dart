@@ -24,18 +24,13 @@ class _FirstState extends State<First> {
     Size size = MediaQuery.of(context).size;
     double height = size.height;
     return Scaffold(
-        backgroundColor: const Color(0xFF000000),
+        backgroundColor: const Color(0xFF333333),
         body: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Expanded(
               child:
               Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                 Padding(padding: EdgeInsets.only(top: height / 6.5)),
-                const Text(
-                  'Ruyzan',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Roboto', fontSize: 35, color: Colors.white),
-                ),
+                Image.asset('assets/logo.jpg'),
                 const Padding(padding: EdgeInsets.only(top: 10)),
                 const Padding(padding: EdgeInsets.only(top: 90)),
                 _getIconButton(context),

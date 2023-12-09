@@ -15,7 +15,7 @@ class _ForgetPassState extends State<ForgetPass> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF333333),
       body: SafeArea(
         child: Stack(
           children: <Widget>[

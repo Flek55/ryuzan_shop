@@ -165,6 +165,7 @@ class StartState extends State<Start> {
         ]),
       ),
       appBar: AppBar(
+        backgroundColor: const Color(0xFF333333),
         centerTitle: true,
         title: const Text(
           "Ryuzan",

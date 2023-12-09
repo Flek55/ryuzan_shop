@@ -11,7 +11,7 @@ class _LogRegState extends State<LogReg> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF333333),
       body: SafeArea(child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -44,7 +44,7 @@ class _LogRegState extends State<LogReg> {
                 'Регистрация',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Color(0xFFF4D5BC),
+                  color: Colors.white,
                   fontSize: 18,
                 ),
               ),
@@ -65,7 +65,7 @@ class _LogRegState extends State<LogReg> {
                 'Вход',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Color(0xFFF4D5BC),
+                  color: Colors.white,
                   fontSize: 18,
                 ),
               ),

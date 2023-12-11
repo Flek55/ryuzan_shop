@@ -33,6 +33,9 @@ class SupabaseAuthRepository implements AuthRepository {
         case "Invalid login credentials":
           errMsg = "Неверный логин или пароль";
           break;
+        default:
+          errMsg = "Ошибка";
+          break;
       }
     }
     if (errMsg == ""){

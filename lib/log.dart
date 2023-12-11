@@ -164,14 +164,16 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               isButtonPressed = false;
                             });
-                            Fluttertoast.showToast(
-                                msg: ans[1],
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.deepOrange,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                            if (ans[1] != "0") {
+                              Fluttertoast.showToast(
+                                  msg: ans[1],
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.deepOrange,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            }
                             _passwordController.clear();
                           }
                         }

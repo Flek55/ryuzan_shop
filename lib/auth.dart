@@ -14,6 +14,7 @@ class SupabaseAuthRepository implements AuthRepository {
 
   @override
   Future<String> signInEmailAndPassword(String email, String password) async {
+    String errMsg = "";
     try {
       final response = await supabase.auth.signInWithPassword(
         email: email,
@@ -24,11 +25,20 @@ class SupabaseAuthRepository implements AuthRepository {
       if (userId == null) {
         throw UnimplementedError();
       }
-    }on AuthException{
-      return "0";
+    }on AuthException catch (e){
+      switch (e.message){
+        case "Email not confirmed":
+          errMsg = "Эл-почта не подтверждена!";
+          break;
+        case "Invalid login credentials":
+          errMsg = "Неверный логин или пароль";
+          break;
+      }
     }
-
-    return "1";
+    if (errMsg == ""){
+      return "1";
+    }
+    return errMsg;
   }
 
   @override

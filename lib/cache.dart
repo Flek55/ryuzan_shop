@@ -66,8 +66,4 @@ class LocalDataAnalyse implements LocalDataSource {
     sp.setString(CACHED_USER_PASSWORD, jsonUserPassword);
     return Future.value(jsonLoginStatus);
   }
-
-  Future<void> setCart(List ids){
-    return Future.value();
-  }
 }

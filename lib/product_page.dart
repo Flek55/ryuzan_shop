@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -34,23 +32,6 @@ class _ProductPageState extends State<ProductPage> {
               style: const TextStyle(
                   fontFamily: "Roboto", fontSize: 20, color: Colors.white)),
           backgroundColor: const Color(0xFF333333),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                await ProductInfo.updateCart(
-                    Supabase.instance.client.auth.currentUser?.id,
-                    Supabase.instance.client.auth.currentUser?.email,
-                    widget.productIndex, "+");
-                await ProductInfo.getCart(Supabase.instance.client.auth.currentUser?.id);
-                await widget.notifyParent();
-              },
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-            ),
-            const Padding(padding: EdgeInsets.only(right: 15)),
-          ],
         ),
         body: Column(children: [
           const Padding(padding: EdgeInsets.all(20)),
@@ -80,14 +61,49 @@ class _ProductPageState extends State<ProductPage> {
                 style: const TextStyle(
                     fontFamily: "Roboto", fontSize: 16, color: Colors.black))
           ]),
-          IconButton(onPressed: () async {
-            await ProductInfo.updateCart(
-                Supabase.instance.client.auth.currentUser?.id,
-                Supabase.instance.client.auth.currentUser?.email,
-                widget.productIndex, "-");
-            await ProductInfo.getCart(Supabase.instance.client.auth.currentUser?.id);
-            await widget.notifyParent();
-          }, icon: const Icon(Icons.remove))
+          const Padding(padding: EdgeInsets.only(top: 10)),
+          Column(children:[
+          _getPlus(),_getMinus()]),
         ]));
   }
+
+  _getPlus(){
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        side: const BorderSide(color: Colors.black, width: 2),
+      ),
+      onPressed: () async {
+        await ProductInfo.updateCart(
+            Supabase.instance.client.auth.currentUser?.id,
+            Supabase.instance.client.auth.currentUser?.email,
+            widget.productIndex, "+");
+        await ProductInfo.getCart(Supabase.instance.client.auth.currentUser?.id);
+        setState(() {});
+        await widget.notifyParent();
+      },
+      child: const Text("Добавить в корзину",style: TextStyle(color: Colors.black),),
+    );
+  }
+
+  _getMinus(){
+    int am = ProductInfo.findAmount(widget.productIndex);
+    if (am > 0){
+      return OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Colors.black, width: 2),
+        ),
+        onPressed: () async {
+        await ProductInfo.updateCart(
+            Supabase.instance.client.auth.currentUser?.id,
+            Supabase.instance.client.auth.currentUser?.email,
+            widget.productIndex, "-");
+        await ProductInfo.getCart(Supabase.instance.client.auth.currentUser?.id);
+        setState(() {});
+        await widget.notifyParent();
+      }, child: const Text("Убрать из корзины",style: TextStyle(color: Colors.black),),);
+    }else{
+      return const SizedBox();
+    }
+  }
+
 }

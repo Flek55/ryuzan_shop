@@ -6,6 +6,7 @@ import 'package:ryozan_shop/log.dart';
 import 'package:ryozan_shop/register.dart';
 import 'package:ryozan_shop/scroll_behavior.dart';
 import 'package:ryozan_shop/start.dart';
+import 'package:ryozan_shop/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'first.dart';
 import 'logreg.dart';
@@ -40,6 +41,7 @@ Future<void> main() async {
       '/register': (context) => const SignUpPage(),
       '/forpass': (context) => const ForgetPass(),
     },
+    theme: theme(),
   ));
 }
 

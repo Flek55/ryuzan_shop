@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ryozan_shop/auth.dart';
 import 'package:ryozan_shop/product_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'cache.dart';
 import 'db.dart';
@@ -25,14 +27,12 @@ class StartState extends State<Start> {
   @override
   void initState() {
     productData = ProductInfo.data;
-    print(productData);
     cart = ProductInfo.cart;
     super.initState();
   }
 
   refresh() {
     setState(() {});
-    print(cart);
   }
 
   int _selectedIndex = 0;
@@ -45,6 +45,159 @@ class StartState extends State<Start> {
 
   Future<Object?> getNavigator() {
     return Navigator.pushNamedAndRemoveUntil(context, "/", (r) => false);
+  }
+
+  _cartPage() {
+    if (cart.isNotEmpty) {
+      return SingleChildScrollView(
+        child: Column(children: [
+          const Padding(padding: EdgeInsets.only(top: 10)),
+          ListView.separated(
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 0.0, horizontal: 10.0),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => ProductPage(
+                                productIndex:
+                                    int.parse(cart[index].keys.elementAt(0)) -
+                                        1,
+                                notifyParent: () {
+                                  Timer.periodic(const Duration(seconds: 1),
+                                      (Timer t) => setState(() {}));
+                                },
+                              ),
+                            ));
+                      },
+                      child: SizedBox(
+                          height: 110,
+                          child: SizedBox(
+                            width: w * 0.94,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
+                              color: Colors.white70,
+                              elevation: 10,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxWidth: w * 0.28,
+                                        maxHeight: h * 0.28,
+                                      ),
+                                      child: Image.network(
+                                          productData[int.parse(cart[index]
+                                                  .keys
+                                                  .elementAt(0)) -
+                                              1]["link"],
+                                          fit: BoxFit.fill),
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: w * 0.5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 10, 0, 0),
+                                          child: Text(
+                                            '${productData[int.parse(cart[index].keys.elementAt(0)) - 1]["name"]}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: w * 0.5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5, 10, 0, 0),
+                                          child: Text(
+                                            "${productData[int.parse(cart[index].keys.elementAt(0)) - 1]["description"]}",
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5, 40, 0, 0),
+                                        child: Text(
+                                          (cart[index].values)
+                                              .toString()
+                                              .substring(1, 2),
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ))));
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Padding(padding: EdgeInsets.only(top: 10));
+            },
+            itemCount: cart.length,
+            shrinkWrap: true,
+          ),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Colors.black, width: 2),
+            ),
+            onPressed: () async {
+              await ProductInfo.placeOrder(
+                  Supabase.instance.client.auth.currentUser?.id,
+                  Supabase.instance.client.auth.currentUser?.email);
+              cart = [];
+              await ProductInfo.clearCart(
+                  Supabase.instance.client.auth.currentUser?.id);
+              setState(() {});
+              Fluttertoast.showToast(
+                  msg: "Заказ сделан!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            },
+            child: const Text("Сделать Заказ",style: TextStyle(color: Colors.black),),
+          )
+        ]),
+      );
+    } else {
+      return const Column(children: [
+        Padding(padding: EdgeInsets.only(top: 20)),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            "Корзина пуста",
+            style: TextStyle(fontSize: 20),
+          )
+        ])
+      ]);
+    }
   }
 
   @override
@@ -61,14 +214,15 @@ class StartState extends State<Start> {
                       vertical: 0.0, horizontal: 10.0),
                   child: InkWell(
                       onTap: () {
-
                         Navigator.push(
                             context,
                             MaterialPageRoute<void>(
                               builder: (BuildContext context) => ProductPage(
-                                  productIndex: index, notifyParent: (){
-                                Timer.periodic(const Duration(seconds: 1), (Timer t) => setState(() {}));
-                              }),
+                                  productIndex: index,
+                                  notifyParent: () {
+                                    Timer.periodic(const Duration(seconds: 1),
+                                        (Timer t) => setState(() {}));
+                                  }),
                             ));
                       },
                       child: SizedBox(
@@ -156,118 +310,7 @@ class StartState extends State<Start> {
           ),
         ]),
       ),
-      SingleChildScrollView(
-        child: Column(children: [
-          const Padding(padding: EdgeInsets.only(top: 10)),
-          ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0.0, horizontal: 10.0),
-                  child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => ProductPage(
-                                productIndex:
-                                    int.parse(cart[index].keys.elementAt(0)) -
-                                        1,
-                                notifyParent: (){
-                                  Timer.periodic(const Duration(seconds: 1), (Timer t) => setState(() {}));
-                                },
-                              ),
-                            ));
-                      },
-                      child: SizedBox(
-                          height: 110,
-                          child: SizedBox(
-                            width: w * 0.94,
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                              ),
-                              color: Colors.white70,
-                              elevation: 10,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: ConstrainedBox(
-                                      constraints: BoxConstraints(
-                                        maxWidth: w * 0.28,
-                                        maxHeight: h * 0.28,
-                                      ),
-                                      child: Image.network(
-                                          productData[int.parse(cart[index]
-                                                  .keys
-                                                  .elementAt(0)) -
-                                              1]["link"],
-                                          fit: BoxFit.fill),
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      SizedBox(
-                                        width: w * 0.5,
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              5, 10, 0, 0),
-                                          child: Text(
-                                            '${productData[int.parse(cart[index].keys.elementAt(0)) - 1]["name"]}',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: w * 0.5,
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              5, 10, 0, 0),
-                                          child: Text(
-                                            "${productData[int.parse(cart[index].keys.elementAt(0)) - 1]["description"]}",
-                                            style: const TextStyle(
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            5, 40, 0, 0),
-                                        child: Text(
-                                          '₽ ${productData[int.parse(cart[index].keys.elementAt(0)) - 1]["price"]}',
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ))));
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Padding(padding: EdgeInsets.only(top: 10));
-            },
-            itemCount: cart.length,
-            shrinkWrap: true,
-          ),
-        ]),
-      ),
+      _cartPage(),
       const Text(
         'Index 2: School',
       ),

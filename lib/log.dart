@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     if (result == "1") {
       return [true,"1"];
     } else {
-      return [false,"0"];
+      return [false,result];
     }
 
   }
@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                               isButtonPressed = false;
                             });
                             Fluttertoast.showToast(
-                                msg: "Неверный логин или пароль!",
+                                msg: ans[1],
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 1,

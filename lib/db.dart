@@ -10,13 +10,48 @@ class ProductInfo {
     data = await sbi.from('products').select('*');
   }
 
-  static getCart(userId) async{
+  static getCart(userId) async {
     cart = [];
     final sbi = Supabase.instance.client;
-    List<dynamic> temp = await sbi.from("carts").select("ids_amounts").eq("user_id", userId);
+    List<dynamic> temp =
+        await sbi.from("carts").select("ids_amounts").eq("user_id", userId);
     Map<String, dynamic> a = temp[0]["ids_amounts"];
-    a.forEach((k, v) => cart.add({k:v}));
+    a.forEach((k, v) => cart.add({k: v}));
     StartState.cart = ProductInfo.cart;
+  }
+
+  static clearCart(userId) async{
+    cart = [];
+    final sbi = Supabase.instance.client;
+    await sbi.from("carts").update({"ids_amounts": {}}).eq("user_id", userId);
+  }
+
+  static int findAmount(productId) {
+    productId += 1;
+    for (int i = 0; i < cart.length; i++) {
+      if (cart[i]["$productId"] != null) {
+        try {
+          if (cart[i]["$productId"] > 0) {
+            return cart[i]["$productId"];
+          }
+        } on Exception {
+          print("ERRRRRR");
+        }
+      }
+    }
+    return 0;
+  }
+
+  static placeOrder(userId, userEmail) async {
+    final sbi = Supabase.instance.client;
+    Map<String, dynamic> amounts = {};
+    List<dynamic> d =
+        await sbi.from("carts").select("ids_amounts").eq("user_id", userId);
+    if (d.isNotEmpty) {
+      amounts = d[0]["ids_amounts"];
+    }
+    await sbi.from("orders").insert(
+        {"user_id": userId, "email": userEmail, "ids_amounts": amounts});
   }
 
   static getCartic(userId, userEmail) async {
@@ -31,7 +66,7 @@ class ProductInfo {
     for (final a in amounts.keys) {
       for (int j = 0; j < data.length; j++) {
         if ((data[j]["id"]).toString() == a) {
-          ans.add({"${data[j]["name"]}" : amounts[a]});
+          ans.add({"${data[j]["name"]}": amounts[a]});
         }
       }
     }

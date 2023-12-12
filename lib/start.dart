@@ -183,7 +183,10 @@ class StartState extends State<Start> {
                   textColor: Colors.white,
                   fontSize: 16.0);
             },
-            child: const Text("Сделать Заказ",style: TextStyle(color: Colors.black),),
+            child: const Text(
+              "Сделать Заказ",
+              style: TextStyle(color: Colors.black),
+            ),
           )
         ]),
       );
@@ -311,9 +314,6 @@ class StartState extends State<Start> {
         ]),
       ),
       _cartPage(),
-      const Text(
-        'Index 2: School',
-      ),
     ];
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
@@ -391,20 +391,6 @@ class StartState extends State<Start> {
             ),
             onTap: () {
               _onItemTapped(1);
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.info_outline_rounded,
-              size: 31,
-            ),
-            title: const Text(
-              "О нас",
-              style: TextStyle(fontSize: 23),
-            ),
-            onTap: () {
-              _onItemTapped(2);
               Navigator.pop(context);
             },
           ),

@@ -54,25 +54,6 @@ class ProductInfo {
         {"user_id": userId, "email": userEmail, "ids_amounts": amounts});
   }
 
-  static getCartic(userId, userEmail) async {
-    final sbi = Supabase.instance.client;
-    Map<String, dynamic> amounts = {};
-    List<Map<String, dynamic>> ans = [];
-    List<dynamic> d =
-        await sbi.from("carts").select("ids_amounts").eq("user_id", userId);
-    if (d.isNotEmpty) {
-      amounts = d[0]["ids_amounts"];
-    }
-    for (final a in amounts.keys) {
-      for (int j = 0; j < data.length; j++) {
-        if ((data[j]["id"]).toString() == a) {
-          ans.add({"${data[j]["name"]}": amounts[a]});
-        }
-      }
-    }
-    return ans;
-  }
-
   static updateCart(userId, userEmail, productId, operation) async {
     productId += 1;
     final sbi = Supabase.instance.client;

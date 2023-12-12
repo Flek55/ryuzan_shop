@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ryozan_shop/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'cache.dart';
 import 'db.dart';
@@ -143,6 +144,8 @@ class _LoginPageState extends State<LoginPage> {
                           inProgress = false;
                           if (ans[0]) {
                             await ProductInfo.getData();
+                            await ProductInfo.getCart(
+                                Supabase.instance.client.auth.currentUser?.id);
                             SharedPreferences sp =
                                 await SharedPreferences.getInstance();
                             LocalDataAnalyse LDA = LocalDataAnalyse(sp: sp);

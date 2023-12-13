@@ -159,20 +159,16 @@ class _SignUpPageState extends State<SignUpPage> {
                           inProgress = false;
                           if (ans[0]) {
                             EasyLoading.show();
-                            SharedPreferences sp =
-                                await SharedPreferences.getInstance();
-                            LocalDataAnalyse LDA = LocalDataAnalyse(sp: sp);
                             await ProductInfo.getData();
-                            LDA.setLoginStatus(
-                                "1",
-                                _emailController.text.trim(),
-                                _passwordController.text.trim());
-                            CurrentUserData.email =
-                                _emailController.text.trim();
-                            CurrentUserData.pass =
-                                _passwordController.text.trim();
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, "/home", (r) => false);
+                            Navigator.pushNamed(context,"/login");
+                            Fluttertoast.showToast(
+                                msg: "Подтвердите эл-почту",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.deepOrange,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
                             EasyLoading.dismiss();
                             EasyLoading.removeAllCallbacks();
                             _emailController.clear();

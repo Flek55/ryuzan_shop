@@ -12,10 +12,15 @@ class ProductInfo {
 
   static getCart(userId) async {
     cart = [];
+    Map<String, dynamic> a;
     final sbi = Supabase.instance.client;
     List<dynamic> temp =
         await sbi.from("carts").select("ids_amounts").eq("user_id", userId);
-    Map<String, dynamic> a = temp[0]["ids_amounts"];
+    try {
+      a = temp[0]["ids_amounts"];
+    }on RangeError{
+      a = {};
+    }
     a.forEach((k, v) => cart.add({k: v}));
     StartState.cart = ProductInfo.cart;
   }

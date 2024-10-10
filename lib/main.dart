@@ -11,8 +11,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'first.dart';
 import 'logreg.dart';
 
-const sburl = "https://kbhfwdxktibqslpkqpkj.supabase.co";
-const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtiaGZ3ZHhrdGlicXNscGtxcGtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE2MDU5MzEsImV4cCI6MjAxNzE4MTkzMX0.Ji89I1qlefTHNClFZ7JxVKLap9CJQgo0aIlPybQ09Ds';
+const sburl = "https://dpdfblifghsqlvaxoduj.supabase.co";
+const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZGZibGlmZ2hzcWx2YXhvZHVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1ODc1OTksImV4cCI6MjA0NDE2MzU5OX0.n0ELs87i3eck1ZgGNLvVqpl9T71TzwSFZ9fnzwALtfk';
 
 
 Future<void> main() async {

@@ -97,7 +97,7 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: emailController,
             decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Theme.of(context).colorScheme.background),
+                  borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
                 ),
                 enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white),
@@ -114,7 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: passwordController,
             decoration: InputDecoration(
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).colorScheme.background),
+                borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
               ),
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),

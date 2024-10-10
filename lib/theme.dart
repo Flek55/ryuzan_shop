@@ -9,9 +9,7 @@ ThemeData theme(){
             onSecondary: Colors.white,
             tertiary: Colors.grey,
             error: Colors.red,
-            onError: Colors.red,
-            background: Colors.white,
-            onBackground:  Colors.white ,
+            onError: Colors.red ,
             surface: Colors.white,
             onSurface: Colors.white
         ),

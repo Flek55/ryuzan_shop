@@ -47,11 +47,11 @@ class _ForgetPassState extends State<ForgetPass> {
               decoration: InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.background),
+                        color: Theme.of(context).colorScheme.surface),
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.background),
+                        color: Theme.of(context).colorScheme.surface),
                   ),
                   labelText: 'E-mail',
                   labelStyle: Theme.of(context).textTheme.displaySmall),
